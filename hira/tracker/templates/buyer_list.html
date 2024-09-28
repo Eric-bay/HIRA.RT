@@ -1,0 +1,22 @@
+{% load static %}
+{% load custom_filters %}
+{% load mptt_admin %}
+{% load filters %}
+
+<img src="{% static 'images/logo.png' %}" alt="Logo">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer List</title>
+</head>
+<body>
+    <h1>Buyer List</h1>
+    <ul>
+        {% for buyer in buyers %}
+            <li>{{ buyer.name }}</li>  <!-- Assuming 'name' is a field in your Buyer model -->
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Use Chart.js for charts -->
+</head>
+<body>
+    <h1>Real-time Statistics Dashboard</h1>
+
+    <!-- Chart Containers -->
+    <div>
+        <canvas id="requestStatusChart"></canvas>
+    </div>
+    <div>
+        <canvas id="requestTypeChart"></canvas>
+    </div>
+    <div>
+        <canvas id="enteredByChart"></canvas>
+    </div>
+    <div>
+        <canvas id="requesterChart"></canvas>
+    </div>
+    <div>
+        <canvas id="createdAtChart"></canvas>
+    </div>
+
+    <script>
+        var socket = new WebSocket('ws://' + window.location.host + '/ws/dashboard/');
+
+        // Initialize charts
+        var requestStatusCtx = document.getElementById('requestStatusChart').getContext('2d');
+        var requestTypeCtx = document.getElementById('requestTypeChart').getContext('2d');
+        var enteredByCtx = document.getElementById('enteredByChart').getContext('2d');
+        var requesterCtx = document.getElementById('requesterChart').getContext('2d');
+        var createdAtCtx = document.getElementById('createdAtChart').getContext('2d');
+
+        var requestStatusChart = new Chart(requestStatusCtx, {
+            type: 'bar',
+            data: {
+                labels: [], // Filled dynamically
+                datasets: [{
+                    label: 'Request Status',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        var requestTypeChart = new Chart(requestTypeCtx, {
+            type: 'pie',
+            data: {
+                labels: [], // Filled dynamically
+                datasets: [{
+                    label: 'Request Type',
+                    data: [],
+                    backgroundColor: ['rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                    borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)', 'rgba(54, 162, 235, 1)'],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        var enteredByChart = new Chart(enteredByCtx, {
+            type: 'bar',
+            data: {
+                labels: [], // Filled dynamically
+                datasets: [{
+                    label: 'Entered By',
+                    data: [],
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        var requesterChart = new Chart(requesterCtx, {
+            type: 'bar',
+            data: {
+                labels: [], // Filled dynamically
+                datasets: [{
+                    label: 'Requester',
+                    data: [],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        var createdAtChart = new Chart(createdAtCtx, {
+            type: 'line',
+            data: {
+                labels: [], // Filled dynamically
+                datasets: [{
+                    label: 'Requests Created',
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        socket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            console.log('Received data:', data);
+
+            // Update Request Status Chart
+            requestStatusChart.data.labels = data.request_status_labels;
+            requestStatusChart.data.datasets[0].data = data.request_status_data;
+            requestStatusChart.update();
+
+            // Update Request Type Chart
+            requestTypeChart.data.labels = data.request_type_labels;
+            requestTypeChart.data.datasets[0].data = data.request_type_data;
+            requestTypeChart.update();
+
+            // Update Entered By Chart
+            enteredByChart.data.labels = data.entered_by_labels;
+            enteredByChart.data.datasets[0].data = data.entered_by_data;
+            enteredByChart.update();
+
+            // Update Requester Chart
+            requesterChart.data.labels = data.requester_labels;
+            requesterChart.data.datasets[0].data = data.requester_data;
+            requesterChart.update();
+
+            // Update Created At Chart
+            createdAtChart.data.labels = data.created_at_labels;
+            createdAtChart.data.datasets[0].data = data.created_at_data;
+            createdAtChart.update();
+        };
+    </script>
+</body>
+</html>
+

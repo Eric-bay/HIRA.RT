@@ -1,0 +1,33 @@
+{% load static %}
+
+{% block content %}
+<h1>Email Models Management</h1>
+
+<!-- Button to add a new email model -->
+<a href="{% url 'add_email_model' %}" class="btn btn-primary">Add New Email Model</a>
+
+<!-- Table to display email models -->
+<table>
+    <thead>
+        <tr>
+            <th>Model Name</th>
+            <th>Associated Rule</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for email_model in email_models %}
+        <tr>
+            <td>{{ email_model.name }}</td>
+            <td>{{ email_model.associated_rule }}</td>
+            <td>
+                <!-- Link to edit email model -->
+                <a href="{% url 'edit_email_model' email_model.id %}" class="btn btn-secondary">Edit</a>
+                <!-- Link to delete email model -->
+                <a href="{% url 'delete_email_model' email_model.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this email model?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

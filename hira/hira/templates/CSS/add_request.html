@@ -1,0 +1,30 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    
+    <div>
+        {{ form.buyer.label_tag }} {{ form.buyer }}
+        {{ form.buyer.errors }}
+    </div>
+    <div>
+        {{ form.requester.label_tag }} {{ form.requester }}
+        {{ form.requester.errors }}
+    </div>
+    <div>
+        {{ form.subject.label_tag }} {{ form.subject }}
+        {{ form.subject.errors }}
+    </div>
+    <div>
+        {{ form.comments_text.label_tag }} {{ form.comments_text }}
+        {{ form.comments_text.errors }}
+    </div>
+    <div>
+        {{ form.new_comments_text.label_tag }} {{ form.new_comments_text }}
+        {{ form.new_comments_text.errors }}
+    </div>
+    <div>
+        {{ form.attachments.label_tag }} {{ form.attachments }}
+        {{ form.attachments.errors }}
+    </div>
+    <button type="submit">Save</button>
+</form>

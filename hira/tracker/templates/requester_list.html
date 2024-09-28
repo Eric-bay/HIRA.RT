@@ -1,0 +1,46 @@
+{% load static %}
+<img src="{% static 'images/logo.png' %}" alt="Logo">
+
+{% load custom_filters %}
+{% load mptt_admin %}
+
+{% block content %}
+    <h1>Requesters Management</h1>
+
+    <!-- Button to add a new requester -->
+    <a href="{% url 'add_requester' %}" class="btn btn-primary">Add New Requester</a>
+
+    <!-- Table to display requesters -->
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for requester in requesters %}
+            <tr>
+                <td>{{ requester.name }}</td>
+                <td>{{ requester.email }}</td>
+                <td>
+                    <!-- Link to edit requester -->
+                    <a href="{% url 'edit_requester' requester.id %}" class="btn btn-secondary">Edit</a>
+                    <!-- Link to delete requester -->
+                    <a href="{% url 'delete_requester' requester.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this requester?');">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Form to add a new requester -->
+    <h1>Add New Requester</h1>
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+{% endblock %}
+

@@ -1,0 +1,33 @@
+<form method="GET" action="{% url 'search_requests' %}">
+    <input type="text" name="q" placeholder="Search...">
+    <button type="submit">Search</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Requester</th>
+            <th>Request Type</th>
+            <th>Reference</th>
+            <th>Created At</th>
+            <th>Entered By</th>
+            <th>Subject</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in results %}
+        <tr>
+            <td>{{ request.requester.name }}</td>
+            <td>{{ request.request_type }}</td>
+            <td>{{ request.reference }}</td>
+            <td>{{ request.created_at }}</td>
+            <td>{{ request.entered_by.name }}</td>
+            <td>{{ request.subject }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No results found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
